@@ -112,4 +112,8 @@ updatePreview();
 </script>
 
 </body>
-</html>
+</html>const userMsg = document.createElement('div');
+userMsg.className='message user';
+userMsg.textContent = text;
+chatMessages.appendChild(userMsg);
+

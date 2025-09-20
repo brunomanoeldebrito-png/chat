@@ -48,13 +48,30 @@ function sendMessage(){
   addMessage(true,text);
   addMessage(false,"Gerando site inteligente...");
   
-  // Aqui você pode integrar GPT API ou Replit AI para gerar o código real
   setTimeout(()=>{
+    // Aqui a IA simula gerar componentes completos
     siteCode=`<!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Site 10de10 V0</title><style>body{font-family:sans-serif;padding:20px;} h1{color:#007BFF;}</style></head>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Site 10de10 V0</title>
+<style>
+body{font-family:sans-serif;padding:20px;background:#f0f2f5;}
+h1{color:#007BFF;}
+button{padding:10px 15px;background:#28a745;color:white;border:none;border-radius:8px;cursor:pointer;}
+table{border-collapse:collapse;width:100%;margin-top:20px;}
+table, th, td{border:1px solid #ccc;padding:8px;text-align:center;}
+</style>
+</head>
 <body>
 <h1>${text}</h1>
 <p>Site gerado de forma inteligente pela 10de10 V0!</p>
+<button onclick="alert('Botão funcionando!')">Clique Aqui</button>
+
+<h2>Tabela de Exemplo</h2>
+<table>
+<tr><th>Serviço</th><th>Preço</th></tr>
+<tr><td>Impressão</td><td>R$2,50</td></tr>
+<tr><td>PDF</td><td>R$0,10</td></tr>
+<tr><td>Combo 5 páginas</td><td>R$1,00</td></tr>
+</table>
 </body></html>`;
     updatePreview();
     addMessage(false,"Site atualizado com sucesso!");

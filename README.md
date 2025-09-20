@@ -7,7 +7,7 @@
 <style>
 body { margin:0; font-family:sans-serif; display:flex; height:100vh; overflow:hidden; }
 #chat { width:30%; background:#f4f4f4; border-right:2px solid #ccc; padding:10px; display:flex; flex-direction:column; }
-#chatMessages { flex:1; overflow-y:auto; margin-bottom:10px; }
+#chatMessages { flex:1; overflow-y:auto; margin-bottom:10px; padding-right:5px; scroll-behavior:smooth; }
 .message { background:#007BFF; color:white; padding:8px 12px; border-radius:12px; margin-bottom:8px; max-width:90%; }
 .message.user { background:#28a745; align-self:flex-end; }
 #inputContainer { display:flex; }
@@ -49,20 +49,21 @@ const sitePreview = document.getElementById('sitePreview');
 
 function updatePreview(){ sitePreview.srcdoc = siteCode; }
 
+function addMessage(user, text){
+  const msg = document.createElement('div');
+  msg.className = 'message' + (user ? ' user' : '');
+  msg.textContent = text;
+  chatMessages.appendChild(msg);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
 function sendMessage(){
   const input = document.getElementById('userInput');
   const text = input.value.trim();
   if(!text) return;
 
-  const userMsg = document.createElement('div');
-  userMsg.className='message user';
-  userMsg.textContent = text;
-  chatMessages.appendChild(userMsg);
-
-  const iaMsg = document.createElement('div');
-  iaMsg.className='message';
-  iaMsg.textContent = "Gerando código do site...";
-  chatMessages.appendChild(iaMsg);
+  addMessage(true, text);
+  addMessage(false, "Gerando código do site...");
 
   setTimeout(()=>{
     siteCode = `<!DOCTYPE html>
@@ -79,23 +80,23 @@ function sendMessage(){
 </body>
 </html>`;
     updatePreview();
-    iaMsg.textContent="Site atualizado!";
+    addMessage(false, "Site atualizado!");
   },1000);
 
   input.value='';
-  chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 // Função para publicar no GitHub via API
 async function publishGitHub(){
   const token = prompt("Digite seu GitHub Personal Access Token:");
+  const username = prompt("Digite seu usuário do GitHub:");
   const repo = prompt("Digite o nome do repositório (ex: 10de10-sites):");
   const path = prompt("Digite o nome do arquivo (ex: index.html):");
 
-  const content = btoa(unescape(encodeURIComponent(siteCode))); // Base64
+  const content = btoa(unescape(encodeURIComponent(siteCode)));
   const data = { message: "Publicando site via 10de10", content };
 
-  const response = await fetch(`https://api.github.com/repos/YOUR_USERNAME/${repo}/contents/${path}`, {
+  const response = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${path}`, {
     method: "PUT",
     headers: {
       "Authorization": `token ${token}`,
@@ -105,15 +106,11 @@ async function publishGitHub(){
   });
 
   if(response.ok) alert("Site publicado com sucesso!");
-  else alert("Erro ao publicar. Verifique token e repo.");
+  else alert("Erro ao publicar. Verifique token, usuário e repo.");
 }
 
 updatePreview();
 </script>
 
 </body>
-</html>const userMsg = document.createElement('div');
-userMsg.className='message user';
-userMsg.textContent = text;
-chatMessages.appendChild(userMsg);
-
+</html>
